@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "./dist/",
+        "rootDir": "./src/",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "sourceMap": true
+    },
+    "include": [
+        "src", "src/index.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
