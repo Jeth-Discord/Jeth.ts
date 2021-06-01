@@ -11,9 +11,9 @@ module.exports = class reverse extends Command {
   async run(message, args) {
     let reason = args.slice(0).join(' ');
 
-    if (reason.length < 1) return message.channel.send('**' + message.author.tag + "** :xShiininha: Diga uma **mensagem**!");
+    if (reason.length < 1) return message.channel.createMessage('**' + `${message.author.username}#${message.author.discriminator}` + "** :xShiininha: Diga uma **mensagem**!");
 
-    message.channel.sendMessage(`:pencil: Reverse by: **${message.author.username}** \n \n **` + args.join(' ').split('').reverse().join('') + '**');
+    message.channel.createMessageMessage(`:pencil: Reverse by: **${message.author.username}** \n \n **` + args.join(' ').split('').reverse().join('') + '**');
 
   }
 }

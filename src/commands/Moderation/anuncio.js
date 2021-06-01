@@ -10,61 +10,61 @@ module.exports = class anuncio extends Command {
     }
 
     async run(message, args) {
-        let server = await this.client.database.Guilds.findById(message.guild.id)
+        let server = await this.client.database.Guilds.findById(message.member.guild.id)
         if (!message.member.hasPermission('MANAGE_MESSAGES'))
-            return message.channel.send(`> ${message.author},Você não tem a permissão **\`MANAGE_MESSAGES\`** para executar este comando.`)
+            return message.channel.createMessage(`> ${message.author},Você não tem a permissão **\`MANAGE_MESSAGES\`** para executar este comando.`)
         let embedajuda = new MessageEmbed()
             .setTitle('Anuncio | Ajuda', this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
-            .setThumbnail(message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setThumbnail(message.member.guild.iconURL({ dynamic: true, size: 1024 }))
             .setDescription(`<a:Jethhype:665057207196319744> Segue abaixo os comandos que podem ser utilizados na configuração do seu anúncio: <a:Jethhype:665057207196319744>\n \n<:nitro1:667835744903102494> **${server.prefix}anuncio enviar <#chat> <mensagem>** >> Utilizado para mandar o anuncio no canal definido. \n \n<:nitro2:667835748900405249> **${server.prefix}anuncio set <imagem>** >> Para setar um gif ou imagem no anuncio. \n \n<:nitro3:667835748828971018> **${server.prefix}anuncio resetar** >> Para resetar o link do gif ou imagem setado. \n \n<:premium:667149934025375764> **${server.prefix}anuncio ver** >> Para visualizar a sua imagem de anuncio.`)
             .setColor(colors.default)
-            .setFooter("🧪・JScience", message.guild.iconURL({ dynamic: true, size: 1024 }))
-        if (!args[0]) return message.channel.send(embedajuda)
+            .setFooter("🧪・JScience", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
+        if (!args[0]) return message.channel.createMessage(embedajuda)
         if (message.content.startsWith(server.prefix + 'anuncio resetar')) {
             server.linkanuncio = ''
             server.save()
-            return message.channel.send(`**|** ${message.author}, você resetou a ilustração de seu anuncio personalizado.`)
+            return message.channel.createMessage(`**|** ${message.author}, você resetou a ilustração de seu anuncio personalizado.`)
         }
         if (message.content.startsWith(server.prefix + 'anuncio set')) {
             let imagem = args[1]
             if (!imagem) {
-                return message.channel.send(`> ${message.author}, você deve especificar um link válido.`)
+                return message.channel.createMessage(`> ${message.author}, você deve especificar um link válido.`)
             }
             server.linkanuncio = args[1]
             server.save()
-            message.channel.send(`> **|** ${message.author}, você alterou a sua ilustração de anuncio!`).then(msg => msg.delete(5000))
+            message.channel.createMessage(`> **|** ${message.author}, você alterou a sua ilustração de anuncio!`).then(msg => msg.delete(5000))
         }
         if (message.content.startsWith(server.prefix + 'anuncio ver')) {
             let embedver = new MessageEmbed()
-                .setAuthor('Anúncio | Imagem', message.guild.iconURL({ dynamic: true, size: 1024 }) && this.client.user.displayAvatarURL())
-                .setThumbnail(message.guild.iconURL({ dynamic: true, size: 1024 }))
+                .setAuthor('Anúncio | Imagem', message.member.guild.iconURL({ dynamic: true, size: 1024 }) && this.client.user.avatarURL)
+                .setThumbnail(message.member.guild.iconURL({ dynamic: true, size: 1024 }))
                 .setColor(colors.default)
                 .setDescription('**Esta será a imagem que irá aparecer quando seu anuncio estiver finalizado:**')
                 .setImage(`${server.linkanuncio || ""}`)
                 .setFooter('Não apareceu? seu link deve estar inválido', this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
             if (server.linkanuncio) {
-                message.channel.send(embedver)
+                message.channel.createMessage(embedver)
             }
             if (!server.linkanuncio)
                 message.reply('Não há nenhuma Imagem para ser exibida!')
         }
         if (message.content.startsWith(`${server.prefix}anuncio enviar`)) {
-            let chat = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]);
+            let chat = message.mentions.channels.first() || message.member.guild.channels.get(args[0]);
             if (!chat) return message.reply('Você esqueceu de mencionar o chat.')
             let announce = args.slice(2).join(' ')
             if (!announce) return message.reply(`você não argumentou nada para mim enviar, favor, indique o que deseja enviar.`)
 
             let embed = new MessageEmbed()
-                .setThumbnail(message.guild.iconURL({ dynamic: true, size: 1024 }))
+                .setThumbnail(message.member.guild.iconURL({ dynamic: true, size: 1024 }))
                 .setColor(colors.default)
-                .setAuthor(`Anunciado por ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
+                .setAuthor(`Anunciado por ${`${message.author.username}#${message.author.discriminator}`}`, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
                 .setDescription(announce)
                 .setImage(`${server.linkanuncio || ""}`)
-                .setFooter("🧪・JScience", message.guild.iconURL({ dynamic: true, size: 1024 }))
+                .setFooter("🧪・JScience", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
 
             let embedreply = new MessageEmbed()
-                .setAuthor('Aviso', message.guild.iconURL({ dynamic: true, size: 1024 }) && this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
-                .setThumbnail(message.guild.iconURL({ dynamic: true, size: 1024 }))
+                .setAuthor('Aviso', message.member.guild.iconURL({ dynamic: true, size: 1024 }) && this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
+                .setThumbnail(message.member.guild.iconURL({ dynamic: true, size: 1024 }))
                 .setColor(colors.default)
                 .setDescription(`**Você está preste a mandar um anúncio no ${chat}, confirme com os emojis abaixo.** \n \n<a:number1:667590654200774656> Para mencionar \`@everyone\` .\n<a:number2:667590655744147521> Para mencionar \`@here\` .\n<a:number3:667590655698141197> Para não mencionar ninguém.`)
                 .setFooter('Não apareceu? seu link deve estar inválido', this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))

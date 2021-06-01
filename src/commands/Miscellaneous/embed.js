@@ -21,16 +21,16 @@ module.exports = class Ping extends Command {
   async run(message, args) {
     const Discord = require('discord.js')
     var ajuda = new Discord.MessageEmbed()
-      .setAuthor(message.author.tag, this.client.user.avatarURL())
+      .setAuthor(`${message.author.username}#${message.author.discriminator}`, this.client.user.avatarURL())
       .setTitle(`Defina algo para eu transformar em embed.`)
       .addField(`Placeholder's`, `**{guild-name}** - Para dar o nome do servidor.\n**{user-icon}** - Para dar o avatar do autor.\n**{guild-icon}** - Para dar o avatar do servidor.\n**{user}** - Para dar o nickname do autor.\n**{mention}** - Para te mencionar.`, false)
       .addField(`Embed Visualizer`, `Que tal testar sua embed antes de colocar na Jeth? Assim você saberá se há erros ou não. Acesse ao site do [Embed Visualizer](https://leovoel.github.io/embed-visualizer/) e teste.`)
-      .setFooter(`Requisitado por ${message.author.tag} - ID ${message.author.id}`)
+      .setFooter(`Requisitado por ${`${message.author.username}#${message.author.discriminator}`} - ID ${message.author.id}`)
       .setColor(colors.default)
-    if (!args.join(' ')) return message.channel.send({ embed: ajuda })
+    if (!args.join(' ')) return message.channel.createMessage({ embed: ajuda })
 
     try {
-      let a = JSON.parse(args.join(' ').replaceAll('{guild-name}', message.guild.name).replaceAll('{user-icon}', message.author.displayAvatarURL()).replaceAll('{guild-icon}', message.guild.iconURL({ dynamic: true, size: 1024 })).replaceAll('{mention}', `${message.author}`).replace('{user}', message.member.nickname ? message.member.nickname : message.author.username))
+      let a = JSON.parse(args.join(' ').replaceAll('{guild-name}', message.member.guild.name).replaceAll('{user-icon}', message.author.avatarURL).replaceAll('{guild-icon}', message.member.guild.iconURL({ dynamic: true, size: 1024 })).replaceAll('{mention}', `${message.author}`).replace('{user}', message.member.nickname ? message.member.nickname : message.author.username))
       if (a.embed.color) a.embed.color = parseInt(a.embed.color)
       if (a.content) a.content = a.content.slice(0, 2000)
       if (a.embed.title) a.embed.title = a.embed.title.slice(0, 1024)
@@ -38,14 +38,14 @@ module.exports = class Ping extends Command {
       if (a.embed.fields) a.embed.fields = a.embed.fields.slice(0, 1024)
       if (a.embed.footer) a.embed.footer.text = a.embed.footer.text.slice(0, 1024)
       if (a.embed.author) a.embed.author.name = a.embed.author.name.slice(0, 1024)
-      if (a.content) message.channel.send(a.content, { embed: a.embed })
+      if (a.content) message.channel.createMessage(a.content, { embed: a.embed })
       else {
-        message.channel.send({ embed: a.embed })
+        message.channel.createMessage({ embed: a.embed })
           .catch(e => console.log(e))
       }
       console.log((a.embed))
     } catch (e) {
-      message.channel.send(args.join(' '), { disableEveryone: true })
+      message.channel.createMessage(args.join(' '), { disableEveryone: true })
         .catch(e => console.log(e))
     }
   }

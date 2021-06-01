@@ -17,14 +17,14 @@ module.exports = class dancar extends Command {
         .setColor('#a900ff')
         .addField(`${message.author.username}`, ' Se juntou a dança!')
         .setImage(gifs[Math.floor(Math.random() * gifs.length)])
-        .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+        .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
         .setTimestamp()
       try {
         message.delete({ timeout: 100 }).catch(() => { })
-        message.channel.send(embed)
+        message.channel.createMessage(embed)
       } catch (error) {
         console.log(error);
-        message.channel.send(error);
+        message.channel.createMessage(error);
       }
     }
     else {
@@ -33,8 +33,8 @@ module.exports = class dancar extends Command {
         .setColor(colors.default)
         .setDescription(`💃🏻 🕺🏻 ${message.author} Convidou ${defineduser} para dançar e a resposta foi **SIM**`)
         .setImage(gifs1[Math.floor(Math.random() * gifs1.length)])
-        .setFooter(`Pedido por ${message.author.tag}`, message.author.avatarURL()).setTimestamp()
-      message.channel.send(embed1)
+        .setFooter(`Pedido por ${`${message.author.username}#${message.author.discriminator}`}`, message.author.avatarURL()).setTimestamp()
+      message.channel.createMessage(embed1)
     }
   }
 }

@@ -18,16 +18,16 @@ module.exports = class apagar extends Command {
       .setTitle('**Err:**', true)
       .setDescription('Missing Permissions') // inline false
       .addField('*Verifique se você possui a permissão:*', '`MANAGE_MESSAGES`', true)
-      .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL())
+      .setFooter('🧁・Discord da Jeth', message.author.avatarURL)
 
     if (!message.member.hasPermission('MANAGE_MESSAGES'))
-      return message.channel.send(embedA)
+      return message.channel.createMessage(embedA)
     const deleteCount = parseInt(args[0], 10);
     try {
       message.delete();
     } catch (error) {
       console.log(error);
-      message.channel.send(error);
+      message.channel.createMessage(error);
     }
     if (!deleteCount || deleteCount < 2 || deleteCount > 100)
       return message.reply("`Por favor, forneça um número entre 2 e 100 para o número de mensagens a serem excluídas`");
@@ -38,8 +38,8 @@ module.exports = class apagar extends Command {
       .setTimestamp()
       .setColor(colors.default)
       .setTitle(`<:ayaya:683491996790554629> ${message.author.username}`, true)
-      .setDescription(`As mensagens requisitadas no servidor ${message.guild} foram **deletadas** com sucesso!`)
-      .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL())
+      .setDescription(`As mensagens requisitadas no servidor ${message.member.guild} foram **deletadas** com sucesso!`)
+      .setFooter('🧁・Discord da Jeth', message.author.avatarURL)
     return message.author.send(embedB)
       .catch(error => message.reply(`Não foi possível deletar mensagens devido a: ${error}`));
   }

@@ -37,10 +37,10 @@ module.exports = class Registrou extends Command {
                     message.reply(`Você precisa esperar: ${time} minutos.`)
                 }
             } else {
-                message.channel.send(`${message.author},Olá parece que este usuário é novo aqui,então criamos um registro pra vc :D`)
+                message.channel.createMessage(`${message.author},Olá parece que este usuário é novo aqui,então criamos um registro pra vc :D`)
             }
         } else {
-            message.channel.send(`${message.author},Olá parece que vc é novo aqui com os comandos,então criamos um registro pra vc :D`)
+            message.channel.createMessage(`${message.author},Olá parece que vc é novo aqui com os comandos,então criamos um registro pra vc :D`)
         }
     }
 }

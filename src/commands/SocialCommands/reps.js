@@ -14,8 +14,8 @@ module.exports = class Registrou extends Command {
     }
 
     async run(message, args) {
-        let member = message.guild.member(message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.author)
-        if (!member) return message.channel.send('Algum erro terrível aconteceu, entre em contato com skedaddle via /bug')
+        let member = message.member.guild.member(message.mentions.users.first() || message.member.guild.members.get(args[0]) || message.author)
+        if (!member) return message.channel.createMessage('Algum erro terrível aconteceu, entre em contato com skedaddle via /bug')
         let author = await this.client.database.Users.findById(message.author.id)
         let user = await this.client.database.Users.findById(member.id)
         if (!user) {
@@ -32,8 +32,8 @@ module.exports = class Registrou extends Command {
                     .setDescription('**REPUTAÇÃO TOTAL:**')
                     .addField('Usuário:', `${member}`)
                     .addField('Reps:', `${user.rep}`)
-                    .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
-                message.channel.send(embed)
+                    .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
+                message.channel.createMessage(embed)
             }
         }
     }

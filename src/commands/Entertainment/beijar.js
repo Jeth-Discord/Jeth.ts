@@ -10,7 +10,7 @@ module.exports = class beijar extends Command {
     }
     async run(message, args) {
         let user = message.mentions.users.first();
-        if (!user) return message.channel.send('`Você precisa mencionar alguém para beijar!`');
+        if (!user) return message.channel.createMessage('`Você precisa mencionar alguém para beijar!`');
         let gifs = ['https://media1.giphy.com/media/FqBTvSNjNzeZG/source.gif', 'https://thumbs.gfycat.com/FondEvergreenIcterinewarbler-size_restricted.gif', 'https://media1.tenor.com/images/3c167989c5623e40ef517ded7e3c44e2/tenor.gif?itemid=9227861']
         let embed = new Discord.MessageEmbed()
             .setColor(colors.default)
@@ -19,8 +19,8 @@ module.exports = class beijar extends Command {
             .setThumbnail('https://cdn.discordapp.com/emojis/742240824569626674.png')
             .setDescription(`:heart_eyes: **${message.author.username}** acabou de beijar o(a) **${user.username}**`)
             .setImage(gifs[Math.floor(Math.random() * gifs.length)])
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }));
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }));
 
-        message.channel.send(embed)
+        message.channel.createMessage(embed)
     }
 }

@@ -9,7 +9,7 @@ module.exports = class revcargo extends Command {
     }
 
     async run(message, args) {
-        let usuario = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+        let usuario = message.mentions.members.first() || message.member.guild.members.get(args[0])
         let cargo_nome = message.mentions.roles.first() || message.mentions.roles.array([1])
         const embedA = new MessageEmbed()
             .setTimestamp()
@@ -17,12 +17,12 @@ module.exports = class revcargo extends Command {
             .setTitle('**Err:**', `${usuario}`, true)
             .setDescription('Missing Permissions') // inline false
             .addField('*Verifique se você possui a permissão:*', '`MANAGE_ROLES`', true)
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
 
         if (!message.member.hasPermission('MANAGE_ROLES'))
-            return message.channel.send(embedA)
+            return message.channel.createMessage(embedA)
         if (!usuario) return message.reply('`Você não mencionou o usuário!`');
-        if (usuario.id === message.guild.ownerID) {
+        if (usuario.id === message.member.guild.ownerID) {
             message.reply("Você não tem permissão para remover role deste usuário");
             return 0;
         }
@@ -32,17 +32,17 @@ module.exports = class revcargo extends Command {
         }
         let executorRole = message.member.roles.highest;
         let targetRole = usuario.roles.highest;
-        if (executorRole.comparePositionTo(targetRole) <= 0 && message.author.id !== message.guild.ownerID) {
+        if (executorRole.comparePositionTo(targetRole) <= 0 && message.author.id !== message.member.guild.ownerID) {
             message.reply("Você não tem permissão para remover role deste usuário");
             return 0;
         }
-        let clientRole = message.guild.me.roles.highest;
+        let clientRole = message.member.guild.me.roles.highest;
         if (clientRole.comparePositionTo(targetRole) <= 0) {
             message.reply("Você não tem permissão para remover role deste usuário");
             return 0;
         }
         if (!cargo_nome) return message.reply('`Você não colocou um cargo valido!`');
-        let cargo = message.guild.roles.cache.find(role => role.name === `${cargo_nome}`)
+        let cargo = message.member.guild.roles.find(role => role.name === `${cargo_nome}`)
 
         const embed = new MessageEmbed()
             .setTimestamp()
@@ -51,9 +51,9 @@ module.exports = class revcargo extends Command {
             .setThumbnail(usuario.user.displayAvatarURL({ dynamic: true, size: 1024 }))
             .addField('**Staffer:**', `${message.author.username}`, true) // inline true
             .addField('**Cargo Removido:**', `${cargo_nome}`, true)
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
 
         usuario.roles.remove(cargo_nome)
-        message.channel.send(embed)
+        message.channel.createMessage(embed)
     }
 }

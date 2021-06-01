@@ -13,7 +13,7 @@ module.exports = class github extends Command {
 
   async run(message, args) {
     let usuario = args.slice(0).join(" ")
-    if (!usuario) message.channel.send('<a:9komi:663575133151035392> **Por favor!** Diga o nome de um usuário para pesquisar na lista ...')
+    if (!usuario) message.channel.createMessage('<a:9komi:663575133151035392> **Por favor!** Diga o nome de um usuário para pesquisar na lista ...')
     axios.get(`https://api.github.com/users/${usuario}`)
       .then(async function (response) {
         let nome = response.data.name
@@ -22,7 +22,7 @@ module.exports = class github extends Command {
         let tipo = response.data.type
         let compania = response.data.company
         let link = response.data.html_url
-        message.channel.send(new Discord.MessageEmbed()
+        message.channel.createMessage(new Discord.MessageEmbed()
           .setTitle(`Github`)
           .setColor(colors.default)
           .setThumbnail(avatar)
@@ -32,7 +32,7 @@ module.exports = class github extends Command {
           .addField(`Tipo De Usuario`, `${tipo}`, true)
           .addField(`Bio`, `${bio}`, true)
           .addField(`Link Para O Perfil`, `${link}`, true)
-          .setFooter(message.author.tag, message.author.displayAvatarURL())
+          .setFooter(`${message.author.username}#${message.author.discriminator}`, message.author.avatarURL)
           .setTimestamp()
         )
       })

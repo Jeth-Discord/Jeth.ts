@@ -10,19 +10,19 @@ module.exports = class Ping extends Command {
     }
 
     async run(message, args) {
-        let documento = await this.client.database.Guilds.findById(message.guild.id)
+        let documento = await this.client.database.Guilds.findById(message.member.guild.id)
         if (!documento) {
             this.client.database.Guilds({
-                _id: message.guild.id
+                _id: message.member.guild.id
             }).save()
         }
-        if (!args[0]) { return message.channel.send(`${message.author}, defina um novo prefixo! **${documento.prefix}prefix <novo prefix>**`) } // Tell them if they didn't supply any arguments.
+        if (!args[0]) { return message.channel.createMessage(`${message.author}, defina um novo prefixo! **${documento.prefix}prefix <novo prefix>**`) } // Tell them if they didn't supply any arguments.
 
-        if (args.join(' ').length > 2) return message.channel.send(`${message.author}, eu possuo um limite máximo de 2 caracteres em meu prefix, tente novamente amiguinho(a).`)
+        if (args.join(' ').length > 2) return message.channel.createMessage(`${message.author}, eu possuo um limite máximo de 2 caracteres em meu prefix, tente novamente amiguinho(a).`)
 
         documento.prefix = args.join(' ')
         documento.save()
 
-        message.channel.send(`<:concludo:739830713792331817> ${message.author}, meu prefix foi alterado para **${documento.prefix}**`)
+        message.channel.createMessage(`<:concludo:739830713792331817> ${message.author}, meu prefix foi alterado para **${documento.prefix}**`)
     }
 }

@@ -10,7 +10,7 @@ module.exports = class GifBan extends Command {
     }
 
     async run(message, args) {
-        let guildDocument = await this.client.database.Guilds.findById(message.guild.id)
+        let guildDocument = await this.client.database.Guilds.findById(message.member.guild.id)
 
         // const embedA = new Discord.MessageEmbed()
         // .setTimestamp()
@@ -20,24 +20,24 @@ module.exports = class GifBan extends Command {
         // .addField('*Verifique se você possui a permissão:*', '`MANAGE_GUILD`', true)
         // .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL)
         // if (!message.member.hasPermission('MANAGE_GUILD'))
-        // return message.channel.send(embedA)
+        // return message.channel.createMessage(embedA)
         this.client.database.Users.findOne({ _id: message.author.id }, (e, doc) => {
             if (doc) {
                 if (!doc.vip) {
                     message.reply(`Você não está setado como vip do bot e não pode setar seu gif de banimento.`)
                 } else { // faz por else talvez resolva
                     if (!args[0]) {
-                        return message.channel.send(`${message.author}, você deve enviar uma imagem ou especificar um link válido.`)
+                        return message.channel.createMessage(`${message.author}, você deve enviar uma imagem ou especificar um link válido.`)
                     }
 
                     doc.gifban = args[0]
                     doc.save()
-                    message.channel.send(`${message.author}, você alterou a sua ilustração de banimento!,Utilize **${guildDocument.prefix}vip**.`)
+                    message.channel.createMessage(`${message.author}, você alterou a sua ilustração de banimento!,Utilize **${guildDocument.prefix}vip**.`)
                 }
             } else {
                 const saved = new client.database.Users({ _id: message.author.id })
                 saved.save().then(() => {
-                    message.channel.send("<a:loading:663803525603655682> Salvando cadastro... Execute o comando novamente!")
+                    message.channel.createMessage("<a:loading:663803525603655682> Salvando cadastro... Execute o comando novamente!")
                 })
             }
         })

@@ -17,7 +17,7 @@ module.exports = class tapa extends Command {
             .setImage(gifs[Math.floor(Math.random() * gifs.length)])
             .setColor(colors.default)
             .setTimestamp(new Date())
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
-        message.channel.send(embed);
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
+        message.channel.createMessage(embed);
     }
 };

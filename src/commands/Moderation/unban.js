@@ -21,10 +21,10 @@ module.exports = class unban extends Command {
             .setTitle('**Err:**', `${usuario}`, true)
             .setDescription('Missing Permissions') // inline false
             .addField('*Verifique se você possui a permissão:*', '`BAN_MEMBERS`', true)
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
-        if (!message.member.hasPermission('BAN_MEMBERS')) return message.channel.send(embedA)
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
+        if (!message.member.hasPermission('BAN_MEMBERS')) return message.channel.createMessage(embedA)
 
-        if (!args[0]) return message.channel.send(`**${message.author.username}**,Insira o id do membro para eu desbanir ele.`)
+        if (!args[0]) return message.channel.createMessage(`**${message.author.username}**,Insira o id do membro para eu desbanir ele.`)
 
         let embed = new MessageEmbed()
 
@@ -32,13 +32,13 @@ module.exports = class unban extends Command {
             .setTitle('**Ação | Unban**')
             .setThumbnail(usuario.displayAvatarURL({ format: usuario.avatar.startsWith("a_") ? "gif" : "png" }))
             .setDescription(`\n<:Kaeltec:673592197177933864> **Staff:** ${message.author.username} \n**ID:** ${message.author.id}` + `\n<:Kaeltec:673592197177933864> **Usuário:** ${usuario.username} \n**ID:** ${usuario.id}`)
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
             .setTimestamp(new Date());
 
-        message.guild.members.unban(args[0]).then(msg => {
-            message.channel.send(embed)
+        message.member.guild.members.unban(args[0]).then(msg => {
+            message.channel.createMessage(embed)
         }).catch(err => {
-            message.channel.send(`**${message.author.username}** Este usuário não está banido!`)
+            message.channel.createMessage(`**${message.author.username}** Este usuário não está banido!`)
 
         })
     }

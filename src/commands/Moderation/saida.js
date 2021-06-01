@@ -17,45 +17,45 @@ module.exports = class saida extends Command {
             .setTitle('**Err:**', `${message.author}`, true)
             .setDescription('Missing Permissions') // inline false
             .addField('*Verifique se você possui a permissão:*', '`MANAGE_GUILD`', true)
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
         if (!message.member.hasPermission('MANAGE_GUILD'))
-            return message.channel.send(embedA)
-        let guildDocument = await this.client.database.Guilds.findById(message.guild.id)
+            return message.channel.createMessage(embedA)
+        let guildDocument = await this.client.database.Guilds.findById(message.member.guild.id)
         if (args[0] === 'canal') {
-            let channel = message.guild.channels.cache.find(c => c.name === args.slice(1).join(' ')) || message.guild.channels.cache.get(args[1]) || message.mentions.channels.first()
-            if (!channel || channel.type === 'category') return message.channel.send('Coloque um canal válido!')
+            let channel = message.member.guild.channels.find(c => c.name === args.slice(1).join(' ')) || message.member.guild.channels.get(args[1]) || message.mentions.channels.first()
+            if (!channel || channel.type === 'category') return message.channel.createMessage('Coloque um canal válido!')
 
             guildDocument.channelsaida = channel.id
             guildDocument.save().then(async () => {
-                await message.channel.send(`Canal definido: ${channel}`)
+                await message.channel.createMessage(`Canal definido: ${channel}`)
             })
         } else if (args[0] === 'mensagem') {
             let mensagem = args.slice(1).join(' ')
 
-            if (!mensagem) return message.channel.send(`Coloque qual será a mensagem do saida, lembre-se nósso sistema aceita embed...`)
+            if (!mensagem) return message.channel.createMessage(`Coloque qual será a mensagem do saida, lembre-se nósso sistema aceita embed...`)
 
             guildDocument.saidaMessage = mensagem
             guildDocument.save().then(async () => {
                 guildDocument.saidaModule = true
                 guildDocument.save().then(async () => {
-                    let defaultChannel = await message.guild.channels.cache.get(guildDocument.channelsaida)
-                    if (!defaultChannel) return message.channel.send(`Este servidor não possui um canal definido no saida...\nUse: \`${message.prefix}saida canal #canal\` para definir um e use o comando novamente!`)
-                    await message.channel.send(`Mensagem definida\nsaida Ativado...`)
+                    let defaultChannel = await message.member.guild.channels.get(guildDocument.channelsaida)
+                    if (!defaultChannel) return message.channel.createMessage(`Este servidor não possui um canal definido no saida...\nUse: \`${message.prefix}saida canal #canal\` para definir um e use o comando novamente!`)
+                    await message.channel.createMessage(`Mensagem definida\nsaida Ativado...`)
                 })
             })
         } else if (args[0] === 'desativar') {
-            if (!guildDocument.saidaModule) return message.channel.send(`Este servidor não possui um saida ativado!`)
-            let lastChannel = message.guild.channels.cache.get(guildDocument.channelsaida)
+            if (!guildDocument.saidaModule) return message.channel.createMessage(`Este servidor não possui um saida ativado!`)
+            let lastChannel = message.member.guild.channels.get(guildDocument.channelsaida)
             guildDocument.saidaModule = false
             guildDocument.channelsaida = ''
             guildDocument.saidaMessage = ''
 
             guildDocument.save().then(async () => {
-                await message.channel.send(`O saida foi removido do canal ${lastChannel} e desativado`)
+                await message.channel.createMessage(`O saida foi removido do canal ${lastChannel} e desativado`)
             })
         } else {
             let embed = new MessageEmbed()
-                .setAuthor(this.client.user.tag, this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
+                .setAuthor(`${this.client.user.username}#${this.client.user.discriminator}`, this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
                 .setDescription(`Dúvidas de como usar a Saida?\nAqui vai algumas dicas...`)
                 .setColor(colors.default)
                 .addField('Modos de usar', [
@@ -78,7 +78,7 @@ module.exports = class saida extends Command {
                 ].join('\n'), false)
 
             let embed2 = new MessageEmbed()
-                .setAuthor(this.client.user.tag, this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
+                .setAuthor(`${this.client.user.username}#${this.client.user.discriminator}`, this.client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
                 .setDescription(`Dúvidas de como esta a saida do servidor?\nAqui vai o seu painel...`)
                 .setColor(colors.default)
             let canalBemVindo = `<:rejected:739831089543118890> Desativado`;
@@ -97,7 +97,7 @@ module.exports = class saida extends Command {
             embed2.addField("saida está:", msgsaida)
 
             let embedCount = 1
-            message.channel.send({ embed }).then(async m => {
+            message.channel.createMessage({ embed }).then(async m => {
                 await m.react('666762183249494027')// ir para frente
                 let col = m.createReactionCollector((e, u) => (u.id == message.author.id) &&
                     (e.emoji.id == '666762183249494027' /* para frente */ || e.emoji.id == '665721366514892839') /* para trás */,

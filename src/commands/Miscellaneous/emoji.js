@@ -15,9 +15,9 @@ module.exports = class emoji extends Command {
         let Animated = 0;
         let OverallEmojis = 0;
         function Emoji(id) {
-            return this.client.emojis.cache.get(id).toString()
+            return this.client.emojis.get(id).toString()
         }
-        this.message.guild.emojis.forEach(emoji => {
+        this.message.member.guild.emojis.forEach(emoji => {
             OverallEmojis++;
             if (emoji.animated) {
                 Animated++;
@@ -28,9 +28,9 @@ module.exports = class emoji extends Command {
             }
         })
         let Embed = new Discord.MessageEmbed()
-            .setTitle(`Emojis em ${message.guild.name}.`)
+            .setTitle(`Emojis em ${message.member.guild.name}.`)
             .setDescription(`**Animado [${Animated}]**:\n${EmojisAnimated}\n\nNormais [${EmojiCount}]**:\n${Emojis}\n\n**Total de emojis [${OverallEmojis}]**`)
             .setColor(colors.default)
-        message.channel.send(Embed)
+        message.channel.createMessage(Embed)
     }
 }

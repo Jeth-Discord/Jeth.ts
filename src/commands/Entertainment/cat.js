@@ -15,7 +15,7 @@ module.exports = class cat extends Command {
             .setTitle('Seu gatinho :3')
             .setImage(gifs[Math.floor(Math.random() * gifs.length)])
             .setColor(colors.default)
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
             .setTimestamp()
         message.reply(embed);
     }

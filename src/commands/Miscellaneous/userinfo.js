@@ -32,7 +32,7 @@ module.exports = class memberinfo extends Command {
 			},
 		};
 
-		let pUser = message.guild.member(message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.author)
+		let pUser = message.member.guild.member(message.mentions.users.first() || message.member.guild.members.get(args[0]) || message.author)
 
 		let normalUser = new Discord.MessageEmbed()
 			.setAuthor(pUser.user.tag, pUser.user.displayAvatarURL({ dynamic: true, size: 1024 }))
@@ -46,19 +46,19 @@ module.exports = class memberinfo extends Command {
 			.addField(`Dias no Discord:`, `Estou á \`${moment().diff(pUser.user.createdAt, "days")}\` dia (s) no discord`, true)
 			.addField(`Dias no servidor:`, `Estou á \`${moment().diff(pUser.joinedAt, "days")}\` dia (s) no servidor`, true)
 			.addField(`Meus Cargos`, pUser.roles.cache.map(role => role.toString()).join(" ").replace('@everyone', ' '), true)
-			.addField('🌎 | Servidores compartilhados:', `${this.client.guilds.cache.filter(a => a.members.cache.get(pUser.user.id)).map(a => a.name).join(', ')}`, false)
+			.addField('🌎 | Servidores compartilhados:', `${this.client.guilds.cache.filter(a => a.members.get(pUser.user.id)).map(a => a.name).join(', ')}`, false)
 			.setColor(colors.default)
 			.setThumbnail(pUser.user.displayAvatarURL({ dynamic: true, size: 1024 }))
-			.setFooter(`${message.guild.name} - ${moment().format("LL")}`, message.guild.iconURL({ dynamic: true, size: 1024 }));
+			.setFooter(`${message.member.guild.name} - ${moment().format("LL")}`, message.member.guild.iconURL({ dynamic: true, size: 1024 }));
 
 		let embed = new Discord.MessageEmbed()
 			.setDescription('**Veja todas as insígnias que este usuário possui dentro da Jeth:**\n\nCaso você não esteja vendo nenhuma insígnia, certifique-se de estar visualizando pelo nosso servidor oficial da Jeth, caso mesmo assim elas não estejam sendo aparecendo utilize /bug')
 			.setColor(colors.default)
 			.setThumbnail(pUser.user.displayAvatarURL({ dynamic: true, size: 1024 }))
-			.setFooter(`${message.guild.name} - ${moment().format("LL")}`, message.guild.iconURL({ dynamic: true, size: 1024 }));
+			.setFooter(`${message.member.guild.name} - ${moment().format("LL")}`, message.member.guild.iconURL({ dynamic: true, size: 1024 }));
 
 
-		await message.channel.send(normalUser).then(msg => {
+		await message.channel.createMessage(normalUser).then(msg => {
 			setTimeout(() => {
 				msg.react('754934349069287505')
 			}, 500)
@@ -85,15 +85,15 @@ module.exports = class memberinfo extends Command {
 							embed.addField('<:b_DiscordPartner:754934349215826060>', '**This user is a Jeth partner.**')
 						}
 						await msg.edit(embed)
-						msg.reactions.cache.get("754934349069287505").users.remove();
-						msg.reactions.cache.get("754934349069287505").users.remove(pUser);
+						msg.reactions.get("754934349069287505").users.remove();
+						msg.reactions.get("754934349069287505").users.remove(pUser);
 						msg.react('665721366514892839')
-						msg.delete({timeout: 6400})
+						msg.delete({ timeout: 6400 })
 						break;
 					case '665721366514892839':
 						await msg.edit(normalUser)
-						msg.reactions.cache.get('665721366514892839').users.remove();
-						msg.reactions.cache.get('665721366514892839').users.remove(pUser);
+						msg.reactions.get('665721366514892839').users.remove();
+						msg.reactions.get('665721366514892839').users.remove(pUser);
 						msg.react('754934349069287505')
 						break;
 

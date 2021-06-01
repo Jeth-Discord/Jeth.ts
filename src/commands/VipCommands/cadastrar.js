@@ -12,11 +12,11 @@ module.exports = class cadastrar extends Command {
     }
 
     async run(message, args) {
-        let usuario = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-        let membro = message.guild.members.cache.get(args[0]) ? message.guild.members.cache.get(args[0]) : message.mentions.members.first() ? message.mentions.members.first() : message.author
+        let usuario = message.mentions.members.first() || message.member.guild.members.get(args[0])
+        let membro = message.member.guild.members.get(args[0]) ? message.member.guild.members.get(args[0]) : message.mentions.members.first() ? message.mentions.members.first() : message.author
         if (!membro) message.reply('Não encontrei o usuário!')
 
-        this.client.database.Guilds.findOne({ _id: message.guild.id }, (e, server) => {
+        this.client.database.Guilds.findOne({ _id: message.member.guild.id }, (e, server) => {
             if (server) {
                 if (!server.partner) {
                     message.reply(`<a:Jeth_hype:665309103748284426> Este servidor não tem parceria com o bot então,você não pode usar o comando.`)
@@ -29,12 +29,12 @@ module.exports = class cadastrar extends Command {
                             else doc.vip = true
 
                             doc.save().then(() => {
-                                message.channel.send(`<a:Jeth_hype:665309103748284426> O **VIP** do membro ${membro} foi ${doc.vip ? 'ativado' : 'desativado'}.`)
+                                message.channel.createMessage(`<a:Jeth_hype:665309103748284426> O **VIP** do membro ${membro} foi ${doc.vip ? 'ativado' : 'desativado'}.`)
                             })
                         } else {
                             const saved = new this.client.database.Users({ _id: membro.id })
                             saved.save().then(() => {
-                                message.channel.send("<a:loading:663803525603655682> Salvando cadastro... Execute o comando novamente!")
+                                message.channel.createMessage("<a:loading:663803525603655682> Salvando cadastro... Execute o comando novamente!")
                             })
                         }
                     })
@@ -42,7 +42,7 @@ module.exports = class cadastrar extends Command {
             } else {
                 const saved = new this.client.database.Guilds({ _id: membro.id })
                 saved.save().then(() => {
-                    message.channel.send("<a:loading:663803525603655682> Salvando cadastro... Execute o comando novamente!")
+                    message.channel.createMessage("<a:loading:663803525603655682> Salvando cadastro... Execute o comando novamente!")
                 })
             }
         })
@@ -62,7 +62,7 @@ module.exports = class cadastrar extends Command {
 
 //     async run(message, args) {
 //         message.delete()
-//         let usuario = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+//         let usuario = message.mentions.members.first() || message.member.guild.members.get(args[0])
 //         let cargo_nome = message.mentions.roles.first() || message.mentions.roles.array([1])
 //         const embedA = new MessageEmbed()
 //             .setTimestamp()
@@ -70,12 +70,12 @@ module.exports = class cadastrar extends Command {
 //             .setTitle('**Err:**', `${usuario}`, true)
 //             .setDescription('Missing Permissions') // inline false
 //             .addField('*Verifique se você possui a permissão:*', '`MANAGE_ROLES`', true)
-//             .setFooter('Jeth | Developers', message.author.displayAvatarURL())
+//             .setFooter('Jeth | Developers', message.author.avatarURL)
 
-//         if (!message.member.hasPermission('MANAGE_ROLES')) return message.channel.send(embedA)
+//         if (!message.member.hasPermission('MANAGE_ROLES')) return message.channel.createMessage(embedA)
 //         if (!usuario) return message.reply("Você não mencionou o usuário!");
 //         if (!cargo_nome) return message.reply("Você não colocou um cargo valido!");
-//         if (usuario.id === message.guild.ownerID) {
+//         if (usuario.id === message.member.guild.ownerID) {
 //             message.reply("Você não tem permissão para setar role neste usuário");
 //             return 0;
 //         }
@@ -85,11 +85,11 @@ module.exports = class cadastrar extends Command {
 //         }
 //         let executorRole = message.member.roles.highest;
 //         let targetRole = usuario.roles.highest;
-//         if (executorRole.comparePositionTo(targetRole) <= 0 && message.author.id !== message.guild.ownerID) {
+//         if (executorRole.comparePositionTo(targetRole) <= 0 && message.author.id !== message.member.guild.ownerID) {
 //             message.reply("Você não tem permissão para setar role neste usuário");
 //             return 0;
 //         }
-//         let clientRole = message.guild.me.roles.highest;
+//         let clientRole = message.member.guild.me.roles.highest;
 //         if (clientRole.comparePositionTo(targetRole) <= 0) {
 //             message.reply("Você não tem permissão para setar role neste usuário");
 //             return 0;

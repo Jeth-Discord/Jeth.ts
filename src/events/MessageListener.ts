@@ -19,7 +19,7 @@ export default class MessageListener extends EventContext {
 
         if (!commands) return
         if (commands.config.dev && !owner.includes(message.author.id)) return
-        message.channel.sendTyping()
+        message.channel.createMessageTyping()
         commands.run(message, args)
     }
 }

@@ -13,12 +13,12 @@ module.exports = class dbclear extends Command {
 
         this.client.guilds.cache.forEach(g => {
             this.client.database.Guilds.findOneAndDelete(g.id).then(async () => {
-                message.channel.send(`${g.name} deletada....`)
+                message.channel.createMessage(`${g.name} deletada....`)
             })
         })
         this.client.users.cache.forEach(u => {
             this.client.database.Users.findOneAndDelete(u.id).then(async () => {
-                message.channel.send(`${u.tag} deletado...`)
+                message.channel.createMessage(`${u.tag} deletado...`)
             })
         })
     }

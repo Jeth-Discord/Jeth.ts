@@ -11,18 +11,18 @@ module.exports = class family extends Command {
     }
 
     async run(message, args) {
-        let usuario = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+        let usuario = message.mentions.members.first() || message.member.guild.members.get(args[0])
         const embedA = new MessageEmbed()
             .setTimestamp()
             .setColor(colors.mod)
             .setTitle('**Err:**', `${usuario}`, true)
             .setDescription('Missing Permissions') // inline false
             .addField('*Verifique se você possui a permissão:*', '`MANAGE_ROLES`', true)
-            .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL())
+            .setFooter('🧁・Discord da Jeth', message.author.avatarURL)
 
-        if (!message.member.hasPermission('MANAGE_ROLES')) return message.channel.send(embedA)
+        if (!message.member.hasPermission('MANAGE_ROLES')) return message.channel.createMessage(embedA)
         if (!usuario) return message.reply("Você não mencionou o usuário!");
-        if (usuario.id === message.guild.ownerID) {
+        if (usuario.id === message.member.guild.ownerID) {
             message.reply("Você não tem permissão para setar role neste usuário");
             return 0;
         }
@@ -32,17 +32,17 @@ module.exports = class family extends Command {
         }
         let executorRole = message.member.roles.highest;
         let targetRole = usuario.roles.highest;
-        if (executorRole.comparePositionTo(targetRole) <= 0 && message.author.id !== message.guild.ownerID) {
+        if (executorRole.comparePositionTo(targetRole) <= 0 && message.author.id !== message.member.guild.ownerID) {
             message.reply("Você não tem permissão para setar role neste usuário");
             return 0;
         }
-        let clientRole = message.guild.me.roles.highest;
+        let clientRole = message.member.guild.me.roles.highest;
         if (clientRole.comparePositionTo(targetRole) <= 0) {
             message.reply("Você não tem permissão para setar role neste usuário");
             return 0;
         }
 
-        let role = message.guild.roles.cache.find(r => r.id === "832814054623412225");
+        let role = message.member.guild.roles.find(r => r.id === "832814054623412225");
 
         const embed = new MessageEmbed()
             .setTimestamp()
@@ -52,12 +52,12 @@ module.exports = class family extends Command {
             .addField('**Executor:**', `${message.author.username}`, true) // inline true
             .addField('**Cargo Recebido:**', `${role}`, true)
             .setImage('https://data.whicdn.com/images/273383424/original.gif')
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
 
 
         if (usuario.roles.cache.has(role)) return message.reply("o membro mencionado já possui esse cargo.")
         usuario.roles.add(role)
-        message.channel.send(embed)
+        message.channel.createMessage(embed)
 
     }
 }

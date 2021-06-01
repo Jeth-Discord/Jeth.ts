@@ -20,7 +20,7 @@ module.exports = class changeAvatar extends Command {
                 .setImage(avatar)
                 .setColor(colors.default)
 
-            message.channel.send(embed)
+            message.channel.createMessage(embed)
         }).catch(() => { message.reply('Deu erro!') })
     }
 }

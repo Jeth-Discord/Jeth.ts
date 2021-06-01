@@ -10,8 +10,8 @@ module.exports = class vip extends Command {
   }
 
   async run(message, args) {
-    if (message.guild.id !== '804575416098488380') {
-      return message.channel.send('<:CancelarK:673592197341249559> Este comando só pode ser executado no servidor oficial da **Jeth!**');
+    if (message.member.guild.id !== '804575416098488380') {
+      return message.channel.createMessage('<:CancelarK:673592197341249559> Este comando só pode ser executado no servidor oficial da **Jeth!**');
     } else {
       const vipao = new MessageEmbed()
 
@@ -22,17 +22,17 @@ module.exports = class vip extends Command {
         .setDescription('Aqui em nosso sistema consta que você não é um usuário vip! <:g_pitazinha:742243561696657419>') // inline false
         .addField('<a:a_credit_card_yellow:742242900494254190> *Garanta já seu VIP para ter acesso a estes magnificos comandos!*', `**[[ADQUIRA AQUI]](https://pag.ae/7Wfg61Q9n)** <a:a_credit_card_yellow:742242900494254190>`, true)
         .setImage('https://i.imgur.com/hoyGJTN.png')
-        .setFooter('Jeth | Developers', message.author.displayAvatarURL())
+        .setFooter('Jeth | Developers', message.author.avatarURL)
 
-      let guildDocument = await this.client.database.Guilds.findById(message.guild.id)
+      let guildDocument = await this.client.database.Guilds.findById(message.member.guild.id)
       this.client.database.Users.findOne({ _id: message.author.id }, (e, doc) => {
         if (doc) {
           if (!doc.vip) {
-            message.channel.send(vipao)
+            message.channel.createMessage(vipao)
           } else {
             if (args[0] === 'gifban') {
               let mensagem = args.slice(1).join(' ')
-              if (!mensagem) return message.channel.send(`Coloque qual será o link de banimento.`)
+              if (!mensagem) return message.channel.createMessage(`Coloque qual será o link de banimento.`)
               doc.gifban = mensagem
               doc.save()
               message.reply(`Você mudou o gif de banimento,utilize **${guildDocument.prefix}vip gif-teste**,para testar seu gif!`)
@@ -48,22 +48,22 @@ module.exports = class vip extends Command {
                 .setImage(`${doc.gifban}`)
                 .addField('Usuário:', `USER#0000`, true)
                 .addField('ID:', `0000000000000000`, true)
-                .addField('Motivo:', `Banido por ${message.author.tag} — Não relatou um motivo.`, false)
+                .addField('Motivo:', `Banido por ${`${message.author.username}#${message.author.discriminator}`} — Não relatou um motivo.`, false)
                 .setColor(colors.default)
-              message.channel.send({ embed: teste })
+              message.channel.createMessage({ embed: teste })
             } else if (args[0] === 'canal') {
               this.client.database.Canal.findOne({ _id: message.author.id }, (e, doc) => {
                 if (doc) {
-                  message.channel.send('Você já possui uma role própria!')
+                  message.channel.createMessage('Você já possui uma role própria!')
                 }
                 if (!doc) {
                   const args = message.content.slice(11)
-                  var category = message.guild.channels.cache.get("837948274718933005");
-                  message.guild.channels.create(args, {
+                  var category = message.member.guild.channels.get("837948274718933005");
+                  message.member.guild.channels.create(args, {
                     type: 'voice',
                     parent: category.id
                   }).then(async c => {
-                    c.updateOverwrite(message.guild.roles.cache.get(message.guild.id), {
+                    c.updateOverwrite(message.member.guild.roles.get(message.member.guild.id), {
                       CONNECT: false,
                       MANAGE_CHANNELS: false,
                       DEAFEN_MEMBERS: false,
@@ -77,10 +77,10 @@ module.exports = class vip extends Command {
                       MUTE_MEMBERS: true,
                       PRIORITY_SPEAKER: true
                     })
-                    message.channel.send('Canal criado com sucesso!')
+                    message.channel.createMessage('Canal criado com sucesso!')
                     const canal = this.client.database.Canal({ _id: message.author.id })
                     canal.save().then(() => {
-                      message.channel.send("Usuário salvo na database")
+                      message.channel.createMessage("Usuário salvo na database")
                     })
                   })
                 }
@@ -115,18 +115,18 @@ module.exports = class vip extends Command {
                     }
                     this.client.database.Users.findOne({ _id: message.author.id }, (e, doc) => {
                       const reas = args.slice(1).join(" ")
-                      if (!reas) message.channel.send('<:CancelarK:673592197341249559> Erro! você não colocou nenhum nome para a role')
-                      message.guild.roles.create({
+                      if (!reas) message.channel.createMessage('<:CancelarK:673592197341249559> Erro! você não colocou nenhum nome para a role')
+                      message.member.guild.roles.create({
                         data: {
                           name: `${reas}`,
                           color: `${doc.cor}`
                         }
                       }).then(rolec => {
-                        message.channel.send('Cargo criado com sucesso!')
+                        message.channel.createMessage('Cargo criado com sucesso!')
                         message.member.roles.add(rolec.id)
                         const cargo = this.client.database.Cargo({ _id: message.author.id })
                         cargo.save().then(() => {
-                          message.channel.send("Usuário salvo na database")
+                          message.channel.createMessage("Usuário salvo na database")
                         })
                       })
                     })
@@ -135,7 +135,7 @@ module.exports = class vip extends Command {
               })
             } else if (args[0] === 'help') {
               let embed = new MessageEmbed()
-                .setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
+                .setAuthor(`${this.client.user.username}#${this.client.user.discriminator}`, this.client.user.avatarURL)
                 .setDescription(`<a:dshype:683501891493167163> Olá querido(a) usuário(a) VIP !\nPrecisando de uma ajudinha? Aqui vai seus comandos desbloqueados:`)
                 .setColor(colors.default)
                 .setThumbnail('https://cdn.discordapp.com/emojis/742242899156271205.gif?v=1')
@@ -150,7 +150,7 @@ module.exports = class vip extends Command {
                 ].join('\n'), false)
                 .setImage('https://cl.buscafs.com/www.qore.com/public/uploads/images/78325_880x390.jpg')
               let embed2 = new MessageEmbed()
-                .setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
+                .setAuthor(`${this.client.user.username}#${this.client.user.discriminator}`, this.client.user.avatarURL)
                 .setDescription(`Olá !\n\nNós da equipe Jeth, temos o orgulho de ter você como nosso usuário(a) vip, esta pequena compra que você fez para receber suas recompensas nos ajuda e muito a melhorar nossa qualidade, contratar pessoas que consigam melhorar nossos sistemas e ficarmos cada vez mais perto do topo.\n\nMuito obrigado!\n<a:dshype:683501891493167163> Equipe Jeth. <a:dshype:683501891493167163>`)
                 .setThumbnail('https://cdn.discordapp.com/emojis/742242899156271205.gif?v=1')
                 .setColor('#a900ff')
@@ -158,7 +158,7 @@ module.exports = class vip extends Command {
 
               let embedCount = 1
 
-              message.channel.send({ embed }).then(async m => {
+              message.channel.createMessage({ embed }).then(async m => {
                 await m.react('666762183249494027')// ir para frente
                 let col = m.createReactionCollector((e, u) => (u.id == message.author.id) &&
                   (e.emoji.id == '666762183249494027' /* para frente */ || e.emoji.id == '665721366514892839') /* para trás */,

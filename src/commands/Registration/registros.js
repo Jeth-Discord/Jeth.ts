@@ -11,25 +11,25 @@ module.exports = class Ping extends Command {
     }
 
     async run(message) {
-        var guildDocument = await this.client.database.Guilds.findById(message.guild.id).lean()
+        var guildDocument = await this.client.database.Guilds.findById(message.member.guild.id).lean()
             .then(async guildTable => {
                 if (!guildTable) {
-                    let newGuild = new this.client.database.Guilds({ _id: message.guild.id });
+                    let newGuild = new this.client.database.Guilds({ _id: message.member.guild.id });
                     newGuild.save().catch(console.error);
                     return message.reply("Nenhum usuário foi registrado neste servidor").catch(() => { });
                 }
                 const { Collection } = require("discord.js");
                 var members = new Collection();
-                if (message.guild.memberCount >= 250) {
-                    let g = await message.guild.members.fetch().catch(() => { });
+                if (message.member.guild.memberCount >= 250) {
+                    let g = await message.member.guild.members.fetch().catch(() => { });
                     members = g.members;
                 } else {
-                    members = message.guild.members;
+                    members = message.member.guild.members;
                 }
                 var registradores = guildTable.registradores;
                 var top = [];
                 registradores.forEach((registrador, index, registradores) => {
-                    let registradorMembro = message.guild.members.cache.get(registrador._id);
+                    let registradorMembro = message.member.guild.members.get(registrador._id);
                     if (!registradorMembro) {
                         return registradores = registradores.splice(index, 0);
                     }
@@ -66,9 +66,9 @@ module.exports = class Ping extends Command {
                 }
                 const { MessageEmbed } = require("discord.js");
                 let embed = new MessageEmbed()
-                    .setTitle(`Rank dos registradores do: ${message.guild.name}`)
+                    .setTitle(`Rank dos registradores do: ${message.member.guild.name}`)
                     .setColor(colors.default)
-                    .setFooter(`Comando requisitado por: ${message.author.username}`, message.author.displayAvatarURL());
+                    .setFooter(`Comando requisitado por: ${message.author.username}`, message.author.avatarURL);
                 var positionToEmoji = position => {
                     var arr = [
                         ":first_place:",
@@ -95,7 +95,7 @@ module.exports = class Ping extends Command {
                         `**Total: ${top[i].t}**`
                     );
                 }
-                message.channel.send(embed).catch(() => { });
+                message.channel.createMessage(embed).catch(() => { });
             })
             .catch(console.error);
     }

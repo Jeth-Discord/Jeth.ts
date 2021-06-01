@@ -13,7 +13,7 @@ module.exports = class Registrar extends Command {
     }
 
     async run(message, args) {
-        let guildDocument = await this.client.database.Guilds.findById(message.guild.id)
+        let guildDocument = await this.client.database.Guilds.findById(message.member.guild.id)
             .then(guildTable => {
                 let member = message.mentions.members.first();
                 if (!member) {
@@ -25,9 +25,9 @@ module.exports = class Registrar extends Command {
                 if (hit) {
                     return message.reply("Usuário já registrado").catch(() => { });
                 }
-                let masculino = message.guild.roles.cache.get(guildTable.masculino);
-                let feminino = message.guild.roles.cache.get(guildTable.feminino);
-                let nbinario = message.guild.roles.cache.get(guildTable.nbinario);
+                let masculino = message.member.guild.roles.get(guildTable.masculino);
+                let feminino = message.member.guild.roles.get(guildTable.feminino);
+                let nbinario = message.member.guild.roles.get(guildTable.nbinario);
                 if (!masculino || !feminino) {
                     return message.reply(`O comando não foi configurado, para ter mais informações digite ${guildTable.prefix}registro `).catch(() => { });
                 }
@@ -90,19 +90,19 @@ module.exports = class Registrar extends Command {
                 }
                 guildTable.save()
                     .then(() => {
-                        let novatoRole = message.guild.roles.cache.get(guildTable.novato);
+                        let novatoRole = message.member.guild.roles.get(guildTable.novato);
                         if (novatoRole) {
                             member.roles.remove(novatoRole.id, "registro").catch(() => { });
                         }
-                        let registradoRole = message.guild.roles.cache.get(guildTable.registrado);
+                        let registradoRole = message.member.guild.roles.get(guildTable.registrado);
                         if (registradoRole) {
                             member.roles.add(registradoRole.id, "registro").catch(() => { });
                         }//member.roles.map(role => role.name()).join(", ")
-                        //message.guild.member(message.author).roles.map(r => r.name).join(', ');
-                        var cargos = message.guild.member(member.id).roles.cache.map(r => r.name).join(', ');
-                        //var cargos = message.guild.members.get(member.id).roles.map(role => role.name).join(', ');
+                        //message.member.guild.member(message.author).roles.map(r => r.name).join(', ');
+                        var cargos = message.member.guild.member(member.id).roles.cache.map(r => r.name).join(', ');
+                        //var cargos = message.member.guild.members.get(member.id).roles.map(role => role.name).join(', ');
                         const { MessageEmbed } = require("discord.js");
-                        let canal = message.guild.channels.cache.get(guildTable.channelRegister)
+                        let canal = message.member.guild.channels.get(guildTable.channelRegister)
                         if (!canal) canal = message.channel;
                         let embedSv = new MessageEmbed()
                             .setAuthor(`Registrador(a): ${message.author.username}`, message.author.displayAvatarURL)
@@ -112,11 +112,11 @@ module.exports = class Registrar extends Command {
                         canal.send(embedSv).catch(() => { });
                         message.reply('<:concludo:739830713792331817> **|** Usuário registrado com sucesso.').then(msg => { msg.delete({ timeout: 5000 }) })
                         let embedDM1 = new MessageEmbed()
-                            .setTitle(`${message.guild.name} | Notificação Registro`)
-                            .setDescription(`<:registroeyey:739837234097684582> **Você foi registrado(a) por ${message.author}, no Servidor: __${member.guild.name}__.\n` + `Caso não tenha se registrado por essa pessoa, entre em contato com <@${message.guild.owner.id}>.**`)
+                            .setTitle(`${message.member.guild.name} | Notificação Registro`)
+                            .setDescription(`<:registroeyey:739837234097684582> **Você foi registrado(a) por ${message.author}, no Servidor: __${member.guild.name}__.\n` + `Caso não tenha se registrado por essa pessoa, entre em contato com <@${message.member.guild.owner.id}>.**`)
                             .addField(`Cargos Recebidos`, `\`\`\`\n${cargos.replace('@everyone, ', '' && '@here, ', '')}\`\`\``, false)
                             .addField("Data do registro:", `\`\`\`\n${moment(timestamp).format("LL")}\`\`\``, false)
-                            .setThumbnail(message.author.displayAvatarURL())
+                            .setThumbnail(message.author.avatarURL)
                             .setFooter('Depois desse registro cairia bem um bolo né? 🍰')
                             .setColor(colors.default)
                         let embedDM2 = new MessageEmbed()

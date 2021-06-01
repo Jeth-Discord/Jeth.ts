@@ -13,13 +13,13 @@ module.exports = class Registrador extends Command {
     }
 
     async run(message, args) {
-        let guildDocument = await this.client.database.Guilds.findById(message.guild.id)
+        let guildDocument = await this.client.database.Guilds.findById(message.member.guild.id)
             .then(guildTable => {
                 let obj = {
                     m: 0,
                     f: 0,
                     n: 0,
-                    memberCount: message.guild.memberCount
+                    memberCount: message.member.guild.memberCount
                 };
                 if (guildTable) {
                     guildTable.registradores.forEach(registrador => {
@@ -31,7 +31,7 @@ module.exports = class Registrador extends Command {
                     });
                 } else {
                     this.client.database.Guilds({
-                        _id: message.guild.id
+                        _id: message.member.guild.id
                     }).save()
                 }
                 const { MessageEmbed } = require("discord.js");
@@ -43,9 +43,9 @@ module.exports = class Registrador extends Command {
                         `Total de usuários sem registros: ${obj.memberCount - (obj.m + obj.f + obj.n)}`
                     )
                     .setColor(colors.default)
-                    .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+                    .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
                     .setTimestamp();
-                message.channel.send(embed).catch(() => { });
+                message.channel.createMessage(embed).catch(() => { });
             })
             .catch(console.error);
     }

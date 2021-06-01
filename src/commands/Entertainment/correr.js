@@ -14,7 +14,7 @@ module.exports = class correr extends Command {
     const Corrida = "<@" + message.author.id + ">"
     const corrida2 = " <@" + user.id + ">"
     var falas = [" fez **200** metros 🏎 .....", " fez **500** metros 🏎 ...........", " fez **800** metros 🏎 ..............", " fez **1000** metros 🏎 .................", " fez **1500** metros 🏎 ............................", "Explodiu 🔥 ", "Bateu e pegou fogo 🔥"]
-    message.channel.send({
+    message.channel.createMessage({
       "embed": {
         "title": "🏎 Corrida",
         "description": " O " + Corrida + " e" + corrida2 + " **estao disputando uma corrida**",
@@ -32,7 +32,7 @@ module.exports = class correr extends Command {
       message.delete({ timeout: 100 }).catch(() => { })
     } catch (error) {
       console.log(error);
-      message.channel.send(error);
+      message.channel.createMessage(error);
     }
   }
 }

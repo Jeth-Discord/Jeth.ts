@@ -15,17 +15,17 @@ module.exports = class fake extends Command {
             .setTitle('**Err:**', `${message.author}`, true)
             .setDescription('Missing Permissions') // inline false
             .addField('*Verifique se você possui a permissão:*', '`MANAGE_MESSAGES`', true)
-            .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL())
+            .setFooter('🧁・Discord da Jeth', message.author.avatarURL)
         if (!message.member.hasPermission('MANAGE_MESSAGES'))
 
-            return message.channel.send(embedA)
+            return message.channel.createMessage(embedA)
         let user = message.mentions.users.first();
         let botmessage = args.slice(1).join(' ')
         if (user == null) {
-            message.channel.send("`Faltou você mencionar o usuario`")
+            message.channel.createMessage("`Faltou você mencionar o usuario`")
         }
         if (botmessage == null) {
-            message.channel.send("`Ops parace que você esqueceu de colocar a mensagem`")
+            message.channel.createMessage("`Ops parace que você esqueceu de colocar a mensagem`")
         }
         message.channel.createWebhook(user.username, { avatar: user.displayAvatarURL({ format: "png" }) }).then(async w => {
             w.send(botmessage);

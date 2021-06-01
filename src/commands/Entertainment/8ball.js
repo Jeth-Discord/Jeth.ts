@@ -17,13 +17,13 @@ module.exports = class Eightball extends Command {
         let question = args.join(" ");
 
         let ballembed = new Discord.MessageEmbed()
-            .setAuthor(message.author.tag)
+            .setAuthor(`${message.author.username}#${message.author.discriminator}`)
             .setColor(colors.default)
             .addField('Questão', question)
             .addField("Resposta", replies[result])
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
             .setTimestamp()
 
-        message.channel.send(ballembed);
+        message.channel.createMessage(ballembed);
     }
 }

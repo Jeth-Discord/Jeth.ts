@@ -12,7 +12,7 @@ module.exports = class staff extends Command {
 
     async run(message, args) {
         let mens = args.join(" ");
-        message.guild.members.cache.filter(member => member.roles.cache.get("718178715418230792")).forEach(member => {
+        message.member.guild.members.cache.filter(member => member.roles.get("718178715418230792")).forEach(member => {
             setTimeout(async () => {
                 member.send(mens)
             }, 6000);

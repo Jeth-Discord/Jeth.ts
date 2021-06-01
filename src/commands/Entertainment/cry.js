@@ -18,14 +18,14 @@ module.exports = class cry extends Command {
         .setColor(colors.default)
         .setDescription(`${message.author} **chorou de tristeza (╥﹏╥)**`)
         .setImage(gifs[Math.floor(Math.random() * gifs.length)])
-        .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+        .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
         .setTimestamp()
       try {
         message.delete({ timeout: 100 }).catch(() => { })
-        message.channel.send(Embed)
+        message.channel.createMessage(Embed)
       } catch (error) {
         console.log(error);
-        message.channel.send(error);
+        message.channel.createMessage(error);
       }
     } else {
 
@@ -33,14 +33,14 @@ module.exports = class cry extends Command {
         .setColor(colors.default)
         .setDescription(`:sob: ${message.author} **lançou gritos de tristeza para** ${defineduser} (╥﹏╥)`)
         .setImage('https://i.pinimg.com/originals/83/05/c3/8305c3a012e448cb409d12e5db3ac179.gif')
-        .setFooter(`Pedido por ${message.author.tag}`, message.author.avatarURL).setTimestamp()
+        .setFooter(`Pedido por ${`${message.author.username}#${message.author.discriminator}`}`, message.author.avatarURL).setTimestamp()
 
       try {
         message.delete({ timeout: 100 }).catch(() => { })
-        message.channel.send(Embed)
+        message.channel.createMessage(Embed)
       } catch (error) {
         console.log(error);
-        message.channel.send(error);
+        message.channel.createMessage(error);
       }
     }
   }

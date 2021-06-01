@@ -10,10 +10,10 @@ module.exports = class ship extends Command {
         this.category = 'Entertainment'
     }
     async run(message, args, buffer) {
-        let guildDocument = await this.client.database.Guilds.findById(message.guild.id)
+        let guildDocument = await this.client.database.Guilds.findById(message.member.guild.id)
         if (!guildDocument) {
             this.client.database.Guilds({
-                _id: message.guild.id
+                _id: message.member.guild.id
             }).save()
         }
         message.reply(`Gerando o ship!`).then(msg => { msg.delete({ timeout: 7000 }) })
@@ -23,17 +23,17 @@ module.exports = class ship extends Command {
             var mention_2 = args[1];
 
             if (!mention_1 || !mention_2) {
-                message.channel.send(`${message.author}, Informe os parâmetros corretamente \`${guildDocument.prefix}ship @mention + @mention\``);
+                message.channel.createMessage(`${message.author}, Informe os parâmetros corretamente \`${guildDocument.prefix}ship @mention + @mention\``);
                 return;
             }
 
             var mention_tratado = mention_1.replace('<', '').replace('>', '').replace('@', '').replace('!', '');
             var mention_tratado_2 = mention_2.replace('<', '').replace('>', '').replace('@', '').replace('!', '');
-            var username_ship_1 = message.guild.member(mention_tratado || message.guild.members.get(args[0]));
-            var username_ship_2 = message.guild.member(mention_tratado_2 || message.guild.members.get(args[1]));
+            var username_ship_1 = message.member.guild.member(mention_tratado || message.member.guild.members.get(args[0]));
+            var username_ship_2 = message.member.guild.member(mention_tratado_2 || message.member.guild.members.get(args[1]));
 
             if (username_ship_1 === null || username_ship_2 === null) {
-                message.channel.send(`${message.author}, Informe os parâmetros corretamente \`${guildDocument.prefix}ship @mention + @mention\``);
+                message.channel.createMessage(`${message.author}, Informe os parâmetros corretamente \`${guildDocument.prefix}ship @mention + @mention\``);
                 return;
             }
 
@@ -130,7 +130,7 @@ module.exports = class ship extends Command {
                 });
 
         } catch (error) {
-            message.channel.send(`${message.author}, houve um erro ao executar este comando :frowning:, desculpe pela incoveniência estou reportando para o suporte!`);
+            message.channel.createMessage(`${message.author}, houve um erro ao executar este comando :frowning:, desculpe pela incoveniência estou reportando para o suporte!`);
             console.log(error);
         }
     }

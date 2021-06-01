@@ -18,18 +18,18 @@ module.exports = class abracar extends Command {
             .setColor(colors.default)
             .setTitle(`:blush: ${message.author.username} **se deu um abraço**`)
             .setImage(self[Math.floor(Math.random() * self.length)])
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
             .setTimestamp()
 
-        if (message.mentions.users.size < 1) return message.channel.send(embed)
-        if (user.id == message.author.id) message.channel.send(embed)// return message.reply("Você não pode abraçar a si mesmo.")
+        if (message.mentions.users.size < 1) return message.channel.createMessage(embed)
+        if (user.id == message.author.id) message.channel.createMessage(embed)// return message.reply("Você não pode abraçar a si mesmo.")
         var HugEmbed = new Discord.MessageEmbed()
             .setColor(colors.default)
             .setTitle(`:blush: ${message.author.username} **deu um abraço no(a)** ${user.username}`)
             .setImage(gifs[Math.floor(Math.random() * gifs.length)])
-            .setFooter("👒・Ayane Society", message.guild.iconURL({ dynamic: true, size: 1024 }))
+            .setFooter("👒・Ayane Society", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
             .setTimestamp()
 
-        message.channel.send(HugEmbed)
+        message.channel.createMessage(HugEmbed)
     }
 }

@@ -19,15 +19,15 @@ module.exports = class chat extends Command {
             .setTitle('**Err:**', true)
             .setDescription('Missing Permissions') // inline false
             .addField('*Verifique se você possui a permissão:*', '`MANAGE_MESSAGES`', true)
-            .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL())
+            .setFooter('🧁・Discord da Jeth', message.author.avatarURL)
 
         if (!message.member.hasPermission('MANAGE_MESSAGES'))
-            return message.channel.send(embedA)
+            return message.channel.createMessage(embedA)
         const embedban = new MessageEmbed()
             .setColor(colors.default)
             .setDescription(`<a:sireneRoxa:739828671400902697> ${message.author} realmente deseja lockar o chat <#${message.channel.id}>?`)
 
-        const msg = await message.channel.send(embedban),
+        const msg = await message.channel.createMessage(embedban),
             emojis = ['739830713792331817', '739831089543118890'];//array de emojis
 
         for (const i in emojis) {//loop de reações na msg que defini acima
@@ -44,7 +44,7 @@ module.exports = class chat extends Command {
                         .setDescription(`<:concludo:739830713792331817> O canal <#${message.channel.id}> foi bloqueado com sucesso!`)
                         .setColor(colors.default)
                     msg.edit(embedbanido)
-                    message.channel.updateOverwrite(message.guild.id,
+                    message.channel.updateOverwrite(message.member.guild.id,
                         { SEND_MESSAGES: false })
                     break;
                 }
@@ -53,7 +53,7 @@ module.exports = class chat extends Command {
                         .setDescription(`<:concludo:739830713792331817> O canal <#${message.channel.id}> foi desbloqueado com sucesso!`)
                         .setColor(colors.default)
                     msg.edit(embedbanido)
-                    message.channel.updateOverwrite(message.guild.id,
+                    message.channel.updateOverwrite(message.member.guild.id,
                         { SEND_MESSAGES: true })
                     break;
                 }

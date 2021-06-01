@@ -32,15 +32,15 @@ module.exports = class CountCall extends Command {
 
             embed.addField(`Call: ${name}`, `Usuario's:\n \`\`${users}\`\``)
             embed.setColor(colors.default)
-            embed.setAuthor(this.client.user.username + ' | Contagem de Membros', this.client.user.displayAvatarURL())
+            embed.setAuthor(this.client.user.username + ' | Contagem de Membros', this.client.user.avatarURL)
 
 
-        for (const embed of embeds) {
-            message.channel.send(embed);
+            for (const embed of embeds) {
+                message.channel.createMessage(embed);
+            };
+
+            if (users.length = "0") return message.channel.createMessage('Talvez aqui não esteja ninguém em call.').then(sent => sent.delete({ timeout: 5000 }))
+
         };
-
-    if(users.length = "0") return message.channel.send('Talvez aqui não esteja ninguém em call.').then(sent => sent.delete({ timeout: 5000 }))
-
-};   
-        }
+    }
 }

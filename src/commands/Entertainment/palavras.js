@@ -14,19 +14,19 @@ module.exports = class palavra extends Command {
       message.reply('`Você não escreveu nada junto ao comando \n Modo de uso: -palavras Alguma coisa aqui`')
     } else {
       if (message.content.split(' ').slice(1).join(' ').length > 50) {
-        message.channel.send('❌ | `Você ultrapassou o limite de 50 caracteres.`')
+        message.channel.createMessage('❌ | `Você ultrapassou o limite de 50 caracteres.`')
       } else {
         if (message.member.hasPermission('ATTACH_FILES')) {
           var authorMessage = message
-          message.channel.send('🕛 | Aguarde...').then(message => {
+          message.channel.createMessage('🕛 | Aguarde...').then(message => {
             Jimp.read(`http://i.imgur.com/xXUtLqH.png`, function (err, image) {
-              if (err) message.channel.sendMessage('❌ | Algo deu muito errado ao criar a imagem')
+              if (err) message.channel.createMessageMessage('❌ | Algo deu muito errado ao criar a imagem')
               Jimp.loadFont(Jimp.FONT_SANS_32_BLACK).then(function (font) {
                 image.print(font, 11, 13, authorMessage.content.split(' ').slice(1).join(' ')[0] + '... ' + authorMessage.content.split(' ').slice(1).join(' ')[0] + '...', 400)
                 image.print(font, 19, 290, authorMessage.content.split(' ').slice(1).join(' '), 320)
                 var aguardeMessage = message
                 image.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
-                  message.channel.send({
+                  message.channel.createMessage({
                     files: [{
                       attachment: buffer,
                       name: 'imagem.png'
@@ -37,7 +37,7 @@ module.exports = class palavra extends Command {
             })
           })
         } else {
-          message.channel.send('❌ | Algo deu errado, certifique-se se eu tenho a permissão `ATTACH_FILES`')
+          message.channel.createMessage('❌ | Algo deu errado, certifique-se se eu tenho a permissão `ATTACH_FILES`')
         }
       }
     }

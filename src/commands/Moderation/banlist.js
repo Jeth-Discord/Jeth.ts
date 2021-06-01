@@ -11,22 +11,22 @@ module.exports = class Ban extends Command {
 
   async run(message, args) {
 
-if (!message.member.hasPermission('BAN_MEMBERS')) return message.reply('❌ Não tens permissão para ver a lista de membros banidos!'); //Verifica se quem enviou o comando tem permissão para ver os membros banidos
-if (!message.guild.me.hasPermission('BAN_MEMBERS')) return message.channel.send('❌ Não tenho permissão para ver a lista de membros banidos!'); //Verifica se o bot tem permissão para ver os membros banidos
+    if (!message.member.hasPermission('BAN_MEMBERS')) return message.reply('❌ Não tens permissão para ver a lista de membros banidos!'); //Verifica se quem enviou o comando tem permissão para ver os membros banidos
+    if (!message.member.guild.me.hasPermission('BAN_MEMBERS')) return message.channel.createMessage('❌ Não tenho permissão para ver a lista de membros banidos!'); //Verifica se o bot tem permissão para ver os membros banidos
 
-const bans = await message.guild.fetchBans(); //Obtém a lista de membros banidos do servidor
+    const bans = await message.member.guild.fetchBans(); //Obtém a lista de membros banidos do servidor
 
-if (!bans.first()) //Se a lista estiver vazia retorna
-    return message.channel.send('❌ Este servidor não tem membros banidos!');
-   
-let msg = '';
+    if (!bans.first()) //Se a lista estiver vazia retorna
+      return message.channel.createMessage('❌ Este servidor não tem membros banidos!');
 
-//Mapeia a lista de membros banidos e adiciona a sua tag à variável msg (USER#0001)
-bans.map(user => {
-    msg += `\`${user.user.tag}\`, `;
-});
+    let msg = '';
 
-//Por fim envia a mensagem com todas as tags dos membros banidos, com split no caso de o servidor ter muitos membros banidos e a lista for grande
-message.channel.send('📑 Lista de membros banidos:\n' + msg, { split: true });
+    //Mapeia a lista de membros banidos e adiciona a sua tag à variável msg (USER#0001)
+    bans.map(user => {
+      msg += `\`${user.user.tag}\`, `;
+    });
+
+    //Por fim envia a mensagem com todas as tags dos membros banidos, com split no caso de o servidor ter muitos membros banidos e a lista for grande
+    message.channel.createMessage('📑 Lista de membros banidos:\n' + msg, { split: true });
   }
-    }
+}

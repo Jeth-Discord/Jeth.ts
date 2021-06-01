@@ -13,7 +13,7 @@ module.exports = class reply extends Command {
     async run(message, args) {
         var ids = ["753778869013577739", "395788326835322882"];
 
-        let usuario = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+        let usuario = message.mentions.members.first() || message.member.guild.members.get(args[0])
 
         const embedA = new Discord.MessageEmbed()
             .setTimestamp()
@@ -21,11 +21,11 @@ module.exports = class reply extends Command {
             .setTitle('**Err:**', `${usuario}`, true)
             .setDescription('Missing Permissions') // inline false
             .addField('*Verifique se você possui a permissão:*', '`Jeth_OWNER`', true)
-            .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL())
+            .setFooter('🧁・Discord da Jeth', message.author.avatarURL)
 
         if (!ids.includes(message.author.id))
 
-            return message.channel.send(embedA);
+            return message.channel.createMessage(embedA);
 
         var razao13 = args.slice(1).join(" ");
         if (!razao13) return message.reply('Faltando argumentos')
@@ -36,12 +36,12 @@ module.exports = class reply extends Command {
             .setTitle('**Ticket Reply:**', `${usuario}`, true)
             .setDescription('Você recebeu resposta à algum ticket aberto dentro de nosso suporte, pode ser por ter pedido ajuda, por ter dado alguma sugestão e outros.') // inline false
             .addField("<:b_information:742270909259317278> Resposta:", razao13, true)
-            .setFooter('🧁・Discord da Jeth', message.author.displayAvatarURL())
+            .setFooter('🧁・Discord da Jeth', message.author.avatarURL)
 
         usuario.send(embedB)
         if (!Error) {
-            return message.channel.send('<:rejected:739831089543118890> Erro, usuário com Direct Message Bloqueada!');
+            return message.channel.createMessage('<:rejected:739831089543118890> Erro, usuário com Direct Message Bloqueada!');
         } else
-            message.channel.send("<:concludo:739830713792331817> Reply enviado com sucesso! 🗳")
+            message.channel.createMessage("<:concludo:739830713792331817> Reply enviado com sucesso! 🗳")
     }
 }

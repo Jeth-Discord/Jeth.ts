@@ -22,9 +22,9 @@ module.exports = class Warn extends Command {
       .setTitle('**Err:**', `${member}`, true)
       .setDescription('Missing Permissions')
       .addField('*Verifique se você possui a permissão:*', '`MANAGE_ROLES`', true)
-      .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+      .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
 
-    if (!message.member.hasPermission("MANAGE_ROLES")) return message.channel.send(embedA)
+    if (!message.member.hasPermission("MANAGE_ROLES")) return message.channel.createMessage(embedA)
     if (!member) return message.reply("Mencione o member que deseja dar warn!")
     if (!razao.length) {
       razao = "Sem motivos."
@@ -36,13 +36,13 @@ module.exports = class Warn extends Command {
       .setTitle('Ação | Aviso')
       .setColor("#ff004c")
       .setDescription(`\n<:Kaeltec:673592197177933864> **Staff:** ${message.author.username} \n**ID:** ${message.author.id}` + `\n<:Kaeltec:673592197177933864> **Advertido:** ${member.username} \n**ID:** ${member.id}` + `\n<:Registrado:673592197077270558> **Motivo:** ${razao}`)
-      .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+      .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
       .setTimestamp();
 
-    let adv1 = message.guild.roles.cache.find(role => role.name === 'Advertência 1');
+    let adv1 = message.member.guild.roles.find(role => role.name === 'Advertência 1');
     if (!adv1) {
       try {
-        adv1 = await message.guild.roles.create({
+        adv1 = await message.member.guild.roles.create({
           data: {
             name: "Advertência 1",
             color: "#ff8355",
@@ -56,10 +56,10 @@ module.exports = class Warn extends Command {
 
     //end of create role 1
 
-    let adv2 = message.guild.roles.cache.find(role => role.name === 'Advertência 2');
+    let adv2 = message.member.guild.roles.find(role => role.name === 'Advertência 2');
     if (!adv2) {
       try {
-        adv2 = await message.guild.roles.create({
+        adv2 = await message.member.guild.roles.create({
           data: {
             name: "Advertência 2",
             color: "#ff3100",
@@ -73,10 +73,10 @@ module.exports = class Warn extends Command {
 
     //end of create role 2
 
-    let adv3 = message.guild.roles.cache.find(role => role.name === 'Advertência 3');
+    let adv3 = message.member.guild.roles.find(role => role.name === 'Advertência 3');
     if (!adv3) {
       try {
-        adv3 = await message.guild.roles.create({
+        adv3 = await message.member.guild.roles.create({
           data: {
             name: "Advertência 3",
             color: "#ff0003",
@@ -89,9 +89,9 @@ module.exports = class Warn extends Command {
     }
 
     const embed1 = new Discord.MessageEmbed()
-      .setThumbnail(message.guild.iconURL({ dynamic: true, size: 1024 }))
+      .setThumbnail(message.member.guild.iconURL({ dynamic: true, size: 1024 }))
       .setTitle(`${message.author.username}`)
-      .setDescription(`:do_not_litter: **Você foi removido do servidor ${message.guild.name} <:pepoEZ:651528973729398882>**`)
+      .setDescription(`:do_not_litter: **Você foi removido do servidor ${message.member.guild.name} <:pepoEZ:651528973729398882>**`)
       .setColor("#ff0000")
       .addField('<:FeelsCoffeeMan:651528973385465867> Motivo:', `${razao1}`)
       .setFooter('Auto Moderação - :police_officer:')
@@ -99,18 +99,18 @@ module.exports = class Warn extends Command {
 
 
     const warnembed18 = new Discord.MessageEmbed()
-      .setThumbnail(message.guild.iconURL({ dynamic: true, size: 1024 }))
+      .setThumbnail(message.member.guild.iconURL({ dynamic: true, size: 1024 }))
       .setTitle(`${message.author.username}`)
-      .setDescription(`:do_not_litter: **Você recebeu uma advertência no servidor ${message.guild.name} :no_entry_sign:**`)
+      .setDescription(`:do_not_litter: **Você recebeu uma advertência no servidor ${message.member.guild.name} :no_entry_sign:**`)
       .setColor("#ff0000")
       .addField('<:pepe:651487933148299291> Advertência dada por:', `${message.author.username}`)
       .addField('📝 Motivo:', `${razao}`)
       .setFooter('Se você acha que a punição foi aplicada incorretamente, recorra ao staffer! 🥶')
       .setTimestamp(new Date());
 
-    message.channel.send(warnembed)
+    message.channel.createMessage(warnembed)
     member.send(warnembed18)
-    message.guild.member(member).roles.add(adv1)
+    message.member.guild.member(member).roles.add(adv1)
 
     if (member.roles.has(adv1.id)) {
       member.roles.add(adv2)

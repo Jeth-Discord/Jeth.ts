@@ -13,12 +13,12 @@ module.exports = class flip extends Command {
         let moeda = msg[Math.floor(Math.random() * 2)];
 
         const moedaembed1 = new Discord.MessageEmbed()
-            .setAuthor(message.author.tag, message.author.avatarURL())
+            .setAuthor(`${message.author.username}#${message.author.discriminator}`, message.author.avatarURL())
             .setColor(colors.default)
             .setDescription(moeda)
             .setTitle("A face da moeda está virada para...")
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
-        message.channel.send(moedaembed1);
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
+        message.channel.createMessage(moedaembed1);
 
     }
 }

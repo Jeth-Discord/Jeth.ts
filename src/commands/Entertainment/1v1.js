@@ -22,7 +22,7 @@ module.exports = class hvh extends Command {
             .setColor(colors.default)
             .addField("Sobre a batalha:", "O " + v + "\n" + falas[Math.floor(Math.random() * falas.length)] + "\n" + "O " + v2 + "\n" + falas[Math.floor(Math.random() * falas.length)])
             .setTimestamp()
-            .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
-        message.channel.send(embedB)
+            .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
+        message.channel.createMessage(embedB)
     }
 }

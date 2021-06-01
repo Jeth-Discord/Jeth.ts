@@ -18,13 +18,13 @@ module.exports = class bug extends Command {
     let embed = new Discord.MessageEmbed()
       .setColor(colors.mod)
       .setDescription("**BUG-REPORT**")
-      .addField('Ticket criado por:', `${message.author.tag}`, true)
+      .addField('Ticket criado por:', `${`${message.author.username}#${message.author.discriminator}`}`, true)
       .addField('**ID:**', `${message.author.id}`, true)
       .addField('**Descrição:**', `${report}`, true)
-      .setFooter("🧁・Discord da Jeth", message.guild.iconURL({ dynamic: true, size: 1024 }))
+      .setFooter("🧁・Discord da Jeth", message.member.guild.iconURL({ dynamic: true, size: 1024 }))
       .setTimestamp(new Date())
 
-    this.client.users.cache.get(dono.toString()).send(embed)
+    this.client.users.get(dono.toString()).send(embed)
     message.reply(`Seu ticket foi enviado com sucesso!`);
   }
 };

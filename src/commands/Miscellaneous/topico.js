@@ -11,22 +11,22 @@ module.exports = class topico extends Command {
   }
 
   async run(message, args) {
-    let usuario = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+    let usuario = message.mentions.members.first() || message.member.guild.members.get(args[0])
     const embedA = new MessageEmbed()
       .setTimestamp()
       .setColor(colors.mod)
       .setTitle('**Err:**', `${usuario}`, true)
       .setDescription('Missing Permissions') // inline false
       .addField('*Verifique se você possui a permissão:*', '`MANAGE_CHANNELS`', true)
-      .setFooter('Jeth | Developers', message.author.displayAvatarURL())
+      .setFooter('Jeth | Developers', message.author.avatarURL)
     if (!message.member.hasPermission('MANAGE_CHANNELS'))
-      return message.channel.send(embedA)
+      return message.channel.createMessage(embedA)
     let topico = args.join(" ")
     if (args.length === 0)
       return message.reply(`Mencione o canal ou escreva uma mensagem para mim definir no tópico do canal.`);
     let canal = message.mentions.channels.first() || message.channel
     canal.setTopic(topico).then(() => {
-      message.channel.send({
+      message.channel.createMessage({
         embed: {
           setColor: '#c635ff',
           title: "<:concludo:739830713792331817> Novo topico de canal definido",

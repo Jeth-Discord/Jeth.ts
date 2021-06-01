@@ -1,5 +1,5 @@
-import IllyaClient from './Client'
-import config from '../src/config.json'
+import { IllyaClient } from './Client'
+import config from './config.json'
 const client = new IllyaClient(config.token, config.options)
 
 client.connect()
