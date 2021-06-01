@@ -1,5 +1,5 @@
 import { IllyaClient } from '../../Client';
-import { Colors, CommandContext, EmbedBuilder } from '../../utils';
+import { Colors, CommandContext, EmbedBuilder, CounterUtils } from '../../utils';
 import { Message } from 'eris';
 
 module.exports = class EvalCommand extends CommandContext {
@@ -23,8 +23,8 @@ module.exports = class EvalCommand extends CommandContext {
     if (!message.member.permissions.has('manageGuild')) return message.channel.createMessage(embedA.build())
     let guildDocument = await this.client.database.Guilds.findById(message.member.guild.id)
     if (args[0] === 'canal') {
-      let channel = message.member.guild.channels.find(c => c.name === args.slice(1).join(' ')) || message.member.guild.channels.get(args[1]) || message.mentions.channels.first()
-      if (!channel || channel.type === 'category') return message.channel.createMessage('Coloque um canal válido!')
+      let channel = message.member.guild.channels.find(c => c.name === args.slice(1).join(' ')) || message.member.guild.channels.get(args[1]?.replace(/[<#>]/g, ''))
+      if (!channel || channel.type === 4) return message.channel.createMessage('Coloque um canal válido!')
 
       guildDocument.countChannel = channel.id
       guildDocument.save().then(async () => {
@@ -73,26 +73,26 @@ module.exports = class EvalCommand extends CommandContext {
       if (!defaultChannel) return message.channel.createMessage(`Este servidor não possui um canal definido no contador...\nUse: \`${message.prefix}contador canal #canal\` para definir um e use o comando novamente!`)
       setTimeout(async () => {
         //ja volto ai  
-        await message.channel.createMessage(`Mensagem definida como \`${guildDocument.countMessage}\`\nContador ativado...`)
-        await defaultChannel.setTopic
-          (guildDocument.countMessage.replace('{azul}', TranslateFunctions.azul(message.member.guild.memberCount))
-            .replace('{pinky}', TranslateFunctions.pinky(message.member.guild.memberCount))
-            .replace('{gold}', TranslateFunctions.gold(message.member.guild.memberCount))
-            .replace('{green}', TranslateFunctions.green(message.member.guild.memberCount))
-            .replace('{rosa}', TranslateFunctions.rosa(message.member.guild.memberCount))
-            .replace('{red}', TranslateFunctions.red(message.member.guild.memberCount))
-            .replace('{ruby}', TranslateFunctions.ruby(message.member.guild.memberCount))
-            .replace('{amarelo}', TranslateFunctions.amarelo(message.member.guild.memberCount))
-            .replace('{violeta}', TranslateFunctions.violeta(message.member.guild.memberCount))
-            .replace('{natal}', TranslateFunctions.natal(message.member.guild.memberCount))
-            .replace('{redblue}', TranslateFunctions.redblue(message.member.guild.memberCount))
-            .replace('{redblack}', TranslateFunctions.redblack(message.member.guild.memberCount))
-            .replace('{aqua}', TranslateFunctions.aqua(message.member.guild.memberCount))
-            .replace('{ice}', TranslateFunctions.ice(message.member.guild.memberCount))
-            .replace('{roxo}', TranslateFunctions.roxo(message.member.guild.memberCount))
-            .replace('{rainbow}', TranslateFunctions.rainbow(message.member.guild.memberCount))
-            .replace('{blk}', TranslateFunctions.blk(message.member.guild.memberCount))
-            .replace('{bouncepink}', TranslateFunctions.bouncepink(message.member.guild.memberCount)))
+        // await message.channel.createMessage(`Mensagem definida como \`${guildDocument.countMessage}\`\nContador ativado...`)
+        // defaultChannel.edit
+          (guildDocument.countMessage.replace('{azul}', CounterUtils.azul(message.member.guild.memberCount))
+            .replace('{pinky}', CounterUtils.pinky(message.member.guild.memberCount))
+            .replace('{gold}', CounterUtils.gold(message.member.guild.memberCount))
+            .replace('{green}', CounterUtils.green(message.member.guild.memberCount))
+            .replace('{rosa}', CounterUtils.rosa(message.member.guild.memberCount))
+            .replace('{red}', CounterUtils.red(message.member.guild.memberCount))
+            .replace('{ruby}', CounterUtils.ruby(message.member.guild.memberCount))
+            .replace('{amarelo}', CounterUtils.amarelo(message.member.guild.memberCount))
+            .replace('{violeta}', CounterUtils.violeta(message.member.guild.memberCount))
+            .replace('{natal}', CounterUtils.natal(message.member.guild.memberCount))
+            .replace('{redblue}', CounterUtils.redblue(message.member.guild.memberCount))
+            .replace('{redblack}', CounterUtils.redblack(message.member.guild.memberCount))
+            .replace('{aqua}', CounterUtils.aqua(message.member.guild.memberCount))
+            .replace('{ice}', CounterUtils.ice(message.member.guild.memberCount))
+            .replace('{roxo}', CounterUtils.roxo(message.member.guild.memberCount))
+            .replace('{rainbow}', CounterUtils.rainbow(message.member.guild.memberCount))
+            .replace('{blk}', CounterUtils.blk(message.member.guild.memberCount))
+            .replace('{bouncepink}', CounterUtils.bouncepink(message.member.guild.memberCount)))
       }, 5000)
     } else if (args[0] === 'remover') {
       if (!guildDocument.count) return message.channel.createMessage(`Este servidor não possui um contador ativado!`)
@@ -102,7 +102,7 @@ module.exports = class EvalCommand extends CommandContext {
       guildDocument.countMessage = ''
 
       guildDocument.save().then(async () => {
-        await lastChannel.setTopic('')
+        // await lastChannel.edit
         await message.channel.createMessage(`O contador foi removido do canal ${lastChannel} e desativado`)
       })
     } else {
